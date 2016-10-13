@@ -11,6 +11,7 @@
 ---
 class Object
 
+
     getters: {}
     setters: {}
 

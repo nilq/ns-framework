@@ -707,8 +707,7 @@ class Transform extends Object
     ---
     toArgs: =>
 
-        return @position.x, @position.y, @rotation, @scale.x, @scale.y, \
-            @origin.x, @origin.y, @shear.x, @shear.y
+        return @position.x, @position.y, @rotation, @scale.x, @scale.y, @origin.x, @origin.y, @shear.x, @shear.y
 
 
 
@@ -733,3 +732,39 @@ class Transform extends Object
         lg.scale 1 / @scale.x, 1 / @scale.y
         lg.rotate -@rotation
         lg.translate -@position.x, -@position.y
+
+
+
+
+    --- @brief Get the matrix of the transformation.
+    ---
+    --- @return The matrix corresponding to the actual transformation.
+    ---
+    getMatrix: =>
+
+        m = Matrix!
+
+        m\translate @position
+        m\rotate @rotation
+        m\scale @scale
+        m\shear @shear
+        m\translate -@origin
+
+        return m
+
+
+    --- @brief Get the matrix of the inverted transformation.
+    ---
+    --- @return The matrix corresponding to the actual transformation inverted.
+    ---
+    getInvertedMatrix: =>
+
+        m = Matrix!
+
+        m\translate @origin
+        m\shear -@shear
+        m\scale @scale\inverted!
+        m\rotate -@rotation
+        m\translate -@position
+
+        return m
