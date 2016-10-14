@@ -1,5 +1,5 @@
 
-import Object from require "framework.core"
+import Object from require "framework.core.object"
 
 
 import max, min from math
@@ -96,7 +96,7 @@ class Color extends Object
 
 
 
-    --- @brief Clamps the color component to 0 - 255.
+    --- @brief Clamps the color components to 0 - 255.
     ---
     clamp: =>
 
@@ -192,6 +192,7 @@ class Color extends Object
     __eq: (other) =>
 
         return @r == other.r and @g == other.g and @b == other.b
+
 
 
 

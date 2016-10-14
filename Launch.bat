@@ -1,7 +1,8 @@
 @echo off
 
 cls
-moonc .
-love .
 
-echo
+
+moonc .
+echo.
+love .

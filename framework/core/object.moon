@@ -28,14 +28,22 @@ class Object
 
             mt.__index = (name) =>
 
-                if getters = old_index.getters
-                    if getters[name]
-                        return getters[name] @
+
+                if type(old_index) == "function"
+                    old_index @, name
+
                 else
-                    if type(old_index) == "function"
-                        old_index @, name
-                    else
-                        old_index[name]
+
+                    if getters = old_index.getters
+                        if getters[name]
+                            return getters[name] @
+
+                    old_index[name]
+
+
+
+
+
 
 
             mt.__newindex = (name, value) =>
@@ -51,8 +59,6 @@ class Object
 
 
     __newindex: (name, value) =>
-
-        print name
 
         if not @setters
 
