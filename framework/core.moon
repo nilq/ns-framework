@@ -6,4 +6,6 @@ return mix_table {
     require "framework.core.object"
     require "framework.core.color"
     require "framework.core.reference"
+    require "framework.core.scheduler"
+    require "framework.core.signal"
 }
