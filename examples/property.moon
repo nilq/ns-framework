@@ -19,11 +19,14 @@ class Example extends Object
         @_second = 0
 
 
+
     getFirst: =>
 
         return @_first
 
     setFirst: (v) =>
+
+        print "prop"
 
         @_first = v
         return v

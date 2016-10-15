@@ -1,2 +1,2 @@
 
-require "example_tween.main"
+require "examples.scene_node"

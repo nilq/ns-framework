@@ -49,6 +49,8 @@ class Tween extends Object
 
         super t
 
+        @type = "Tween"
+
         @reference = t.ref
         @state = state.none
 
@@ -73,6 +75,7 @@ class Tween extends Object
         @addSignal "finished"
 
 
+
     --- @brief Create a new tween with basic parameters.
     ---
     --- @param ref : The referenced member.
@@ -89,7 +92,8 @@ class Tween extends Object
         return Tween {
             ref: ref
             start_value: startv
-            end_valud: endv
+            end_value: endv
+            easing: easing
             duration: duration
             start_delay: delay
         }

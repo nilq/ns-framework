@@ -247,7 +247,7 @@ class Vector extends Object
     ---
     __tostring: =>
 
-        return "(#{@x}; #{@y})"
+        return "Vector(#{@x}; #{@y})"
 
 
 
@@ -390,6 +390,11 @@ class Matrix extends Object
    --- @param a : Nil, or a 3x3 indexed table.
    ---
    new: (a = nil) =>
+
+       super!
+
+       @type = "Matrix"
+
 
        @m = {
            1, 0, 0,
@@ -670,9 +675,11 @@ class Transform extends Object
 
         super t
 
+        @type = "Transform"
+
         @position = @_opt t.position, Vector!
         @origin = @_opt t.origin, Vector!
-        @scale = @_opt t.scale, Vector 1, 1
+        @scale = @_opt t.scale, Vector\from 1, 1
         @shear = @_opt t.shear, Vector!
 
         @rotation = @_opt t.rotation, 0

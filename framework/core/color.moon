@@ -39,6 +39,8 @@ class Color extends Object
 
         super t
 
+        @type = "Color"
+
         @r = @_opt t.r, 255
         @g = @_opt t.g, 255
         @b = @_opt t.b, 255
@@ -192,6 +194,15 @@ class Color extends Object
     __eq: (other) =>
 
         return @r == other.r and @g == other.g and @b == other.b
+
+
+
+
+    --- @brief Operator overload : tostring(a)
+    ---
+    __tostring: =>
+
+        return "Color(#{@r}; #{@g}; #{@b})"
 
 
 

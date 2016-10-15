@@ -31,7 +31,6 @@ class Object
 
             mt.__index = (name) =>
 
-
                 if type(old_index) == "function"
                     old_index @, name
 

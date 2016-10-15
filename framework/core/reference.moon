@@ -19,7 +19,7 @@ class ObjectReference extends Object
 
         super!
 
-        @type = "Reference"
+        @type = "ObjectReference"
 
         @_object = setmetatable {}, { __mode: 'v' }
         @_object.ref = obj
@@ -91,6 +91,8 @@ class MemberReference extends ObjectReference
     new: (obj, member_name) =>
 
         super obj
+
+        @type = "MemberReference"
 
         @member = member_name
 
