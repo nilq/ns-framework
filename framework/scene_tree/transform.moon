@@ -768,3 +768,10 @@ class Transform extends Object
         m\translate -@position
 
         return m
+
+
+{
+    :Vector,
+    :Matrix,
+    :Transform
+}

@@ -44,7 +44,7 @@ class Signal
             error "Can't differate a function because there are no scheduler"
 
 
-        tbl.insert @list
+        tbl.insert @list, ent
 
 
     --- @brief Disconnect a function from the signal.
@@ -87,26 +87,28 @@ class Signal
             else
 
                 func = entry.func
+                args = {...}
 
                 @scheduler\differed ->
-                    func ...
+                    func unpack args
 
 
             if entry.one_shot
 
-                @tbl.insert @_to_remove, idx
+                tbl.insert @_to_remove, idx
 
 
         tbl.sort @_to_remove
 
 
-        for i, idx in @_to_remove
+        for i, idx in ipairs @_to_remove
 
             tbl.remove @list, idx - i + 1
 
 
         @_to_remove = {}
         @_in_emit = false
+
 
 
 

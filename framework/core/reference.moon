@@ -21,8 +21,8 @@ class ObjectReference extends Object
 
         @type = "Reference"
 
-        @object = setmetatable {}, { __mode: 'v' }
-        @object.ref = obj
+        @_object = setmetatable {}, { __mode: 'v' }
+        @_object.ref = obj
 
         @__is_ref = true
 
@@ -38,7 +38,7 @@ class ObjectReference extends Object
     ---
     isValid: =>
 
-        if @object.ref == nil
+        if @_object.ref == nil
 
             return false
 
@@ -58,7 +58,7 @@ class ObjectReference extends Object
             error "Invalid reference."
 
 
-        return @object.ref
+        return @_object.ref
 
 
     --- @brief Set the referenced object.
@@ -110,7 +110,7 @@ class MemberReference extends ObjectReference
             return false
 
 
-        return @object.ref[@member] != nil
+        return @_object.ref[@member] != nil
 
 
 
@@ -125,7 +125,7 @@ class MemberReference extends ObjectReference
 
             error "Invalid reference."
 
-        return @object.ref[@member]
+        return @_object.ref[@member]
 
 
     --- @brief Set the value of the referenced member.
@@ -139,7 +139,7 @@ class MemberReference extends ObjectReference
 
             error "Invalid reference."
 
-        @object.ref[@member] = v
+        @_object.ref[@member] = v
         return v
 
 
@@ -155,13 +155,13 @@ class MemberReference extends ObjectReference
 
             error "Invalid reference."
 
-        mem = @object.ref[@member]
+        mem = @_object.ref[@member]
 
         if type(mem) != "function"
 
             error "Reference is not pointing to a function."
 
-        return mem @object.ref, ...
+        return mem @_object.ref, ...
 
 
 

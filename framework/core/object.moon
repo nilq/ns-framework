@@ -1,4 +1,6 @@
 
+import Signal from require "framework.core.signal"
+import Scheduler from require "framework.core.scheduler"
 
 
 --- @brief Basic class for every framework's objects.
@@ -25,6 +27,7 @@ class Object
 
             mt = getmetatable @
             old_index = mt.__index
+            old_newindex = mt.__newindex
 
             mt.__index = (name) =>
 
@@ -38,15 +41,17 @@ class Object
                         if getters[name]
                             return getters[name] @
 
-                    old_index[name]
-
-
-
-
-
+                    return old_index[name]
 
 
             mt.__newindex = (name, value) =>
+
+                if type(old_newindex) == "function"
+                    old_newindex @, name, value
+
+                if type(old_index) == "function"
+                    return
+
 
                 if setters = old_index.setters
                     if setters[name]
@@ -88,14 +93,23 @@ class Object
         @type = "Object"
         @name = nil
 
+        @scheduler = @_opt t.scheduler, Scheduler!
+
+        @signals = {}
+
 
         if t.properties
-
 
             for prop in *t.properties
 
                 @property prop[1], prop[2], prop[3]
 
+
+        if t.signals
+
+            for signal in *t.signals
+
+                @addSignal signal
 
 
 
@@ -162,6 +176,67 @@ class Object
 
         @[name] = value
         return value
+
+
+
+
+    --- @brief Add a signal to the object.
+    ---
+    --- @param name : The signal's name.
+    ---
+    addSignal: (name) =>
+
+        if @signals[name] != nil
+
+            error "Signal #{name} already exists."
+
+        @signals[name] = Signal @scheduler
+
+
+
+
+    --- @brief Connect a function to a signal.
+    ---
+    --- @param name : The signal's name.
+    --- @param f : The function to connect.
+    --- @param one_shot : The function will be called once ? (false by default)
+    --- @param differed : Differate the function call (false by default)
+    ---
+    connect: (name, f, one_shot = false, differed = false) =>
+
+        unless @signals[name] != nil
+
+            error "No signal #{name}"
+
+        @signals[name]\connect f, one_shot, differed
+
+
+    --- @brief Disconnect a function from a signal.
+    ---
+    --- @param name : The signal's name.
+    --- @param f : The function to disconnect.
+    ---
+    disconnect: (name, f) =>
+
+        unless @signals[name] != nil
+
+            error "No signal #{name}"
+
+        @signals[name]\disconnect f
+
+
+    --- @brief Emit a signal.
+    ---
+    --- @param name : The signal's name.
+    --- @param ... : Arguments passed to the signal.
+    ---
+    emit: (name, ...) =>
+
+        unless @signals[name] != nil
+
+            error "No signal #{name}"
+
+        @signals[name] ...
 
 
 
