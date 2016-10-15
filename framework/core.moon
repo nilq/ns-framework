@@ -8,4 +8,5 @@ return mix_table {
     require "framework.core.reference"
     require "framework.core.scheduler"
     require "framework.core.signal"
+    require "framework.core.love"
 }

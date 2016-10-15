@@ -22,6 +22,8 @@ tbl = table
 ---   - children_can_process : Can the children process ?
 ---   - children_can_draw : Can the children draw ?
 ---   - is_visible : Is the node visible ?
+---   - alpha : Alpha of the node and its children.
+---   - self_alpha : Alpha of the node (and not its children).
 ---   - has_size : Does the node have a size ?
 ---   - size : The size of the node.
 ---
@@ -70,6 +72,9 @@ class SceneNode extends Object
         @children_can_draw = @_opt t.children_can_draw, true
 
         @is_visible = @_opt t.is_visible, true
+
+        @alpha = 1
+        @self_alpha = 1
 
         @has_size = @_opt t.has_size, true
         @size = @_opt t.size, Vector!
@@ -459,6 +464,37 @@ class SceneNode extends Object
 
             return @parent\getFinalInvertedTransform!\combine @transform\getInvertedMatrix!
 
+
+
+
+    --- @brief Get the final alpha of the node and its children.
+    ---
+    --- @note This function takes in account the alpha of the parent nodes and
+    ---     don't take in account self alpha.
+    ---
+    --- @return The final alpha.
+    ---
+    getAlpha: =>
+
+        if @parent == nil
+
+            return @alpha
+
+        else
+
+            return @parent\getFinalAlpha! * @alpha
+
+
+    --- @brief Get the final alpha of the node.
+    ---
+    --- @note This function takes in account the alpha of the parent nodes and
+    ---     the self alpha value.
+    ---
+    --- @return The final self alpha.
+    ---
+    getSelfAlpha: =>
+
+        return @getFinalAlpha! * @self_alpha
 
 
 

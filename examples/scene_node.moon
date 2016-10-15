@@ -1,6 +1,10 @@
 
+import MemberReference, Love from require "framework.core"
+
 import SceneNode, Tween, Easing, Vector from require "framework.scene_tree"
-import MemberReference from require "framework.core"
+
+require "framework.tools.fps_counter"
+
 
 
 class TextNode extends SceneNode
@@ -11,7 +15,6 @@ class TextNode extends SceneNode
 
         @text = @_opt t.text, "Default Text"
 
-        @apply_transform_only_for_children = true
         @can_process = false
 
         @has_size = false
@@ -27,7 +30,7 @@ class TextNode extends SceneNode
 node = nil
 
 
-love.load = ->
+Love\connect "load", (args) ->
 
     node = TextNode {
         text: "SceneNode example"
@@ -44,11 +47,13 @@ love.load = ->
     t\start!
 
 
-love.update = (dt) ->
+Love\connect "process", (dt) ->
+
+    collectgarbage "collect"
 
     node\process dt
 
 
-love.draw = ->
+Love\connect "draw",  ->
 
     node\draw!
