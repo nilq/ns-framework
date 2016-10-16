@@ -13,6 +13,7 @@ import Scheduler from require "framework.core.scheduler"
 ---
 class Object
 
+
     --- @brief Contructor
     ---
     --- Create a new instance from a building table.
