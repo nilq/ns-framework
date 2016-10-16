@@ -114,6 +114,7 @@ class Color extends Object
         }, a
         
         
+        
 
     --- @brief Get the serialization of the color.
     ---
