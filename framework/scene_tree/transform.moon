@@ -138,6 +138,8 @@ class Vector extends Object
     length: =>
 
         return sqrt @x*@x + @y*@y
+        
+        
 
     --- @brief Get the serialization of the vector.
     ---
