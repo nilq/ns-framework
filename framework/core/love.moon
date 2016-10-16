@@ -121,7 +121,7 @@ class _Love extends Object
 
     --- @brief Get the clipboard's content.
     ---
-    getClipboad: =>
+    getClipboard: =>
 
         return ls.getClipboardText!
 
