@@ -45,11 +45,11 @@ class Example extends Object
 
 example = Example!
 
-print "first = ", example.first -- 0
-print "second = ", example.second -- 2
+print "first = ", example\get "first" -- 0
+print "second = ", example\get "second" -- 2
 
-example.first = 5
-example.second = 5
+example\set "first", 5
+example\set "second", 5
 
-print "first 2 = ", example.first -- 5
-print "second 2 = ", example.second -- 7
+print "first 2 = ", example\get "first" -- 5
+print "second 2 = ", example\get "second" -- 7

@@ -27,7 +27,7 @@ do
 print "Member valid : ", reference\isValid!
 
 if reference\isValid!
-    print " -> Member's value : ", reference.value
+    print " -> Member's value : ", reference\get "value"
 
 
 collectgarbage!

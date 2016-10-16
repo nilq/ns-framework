@@ -292,12 +292,12 @@ class Rectangle extends Object
 
         if t.size
 
-            @size = t.size
+            @set "size", t.size
 
 
         if t.center
 
-            @center = t.center
+            @set "center", t.center
 
 
 

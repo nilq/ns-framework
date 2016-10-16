@@ -14,73 +14,6 @@ import Scheduler from require "framework.core.scheduler"
 class Object
 
 
-    getters: {}
-    setters: {}
-
-
-    __inherited: (cls) =>
-
-        old_init = cls.__init
-
-        cls.__init = (...) =>
-            old_init @, ...
-
-            mt = getmetatable @
-            old_index = mt.__index
-            old_newindex = mt.__newindex
-
-            mt.__index = (name) =>
-
-                if type(old_index) == "function"
-                    old_index @, name
-
-                else
-
-                    if getters = old_index.getters
-                        if getters[name]
-                            return getters[name] @
-
-                    return old_index[name]
-
-
-            mt.__newindex = (name, value) =>
-
-                if type(old_newindex) == "function"
-                    old_newindex @, name, value
-
-                if type(old_index) == "function"
-                    return
-
-
-                if setters = old_index.setters
-                    if setters[name]
-                        return setters[name] @, value
-
-                elseif type(old_index) == "table"
-                    old_index[name] = value
-
-
-
-
-    __newindex: (name, value) =>
-
-        if not @setters
-
-            rawset @, name, value
-            return
-
-        if setter = @setters[name]
-
-            setter @, value
-
-        else
-
-            rawset @, name, value
-
-
-
-
-
     --- @brief Contructor
     ---
     --- Create a new instance from a building table.
@@ -95,6 +28,9 @@ class Object
         @scheduler = @_opt t.scheduler, Scheduler!
 
         @signals = {}
+
+        @getters = {}
+        @setters = {}
 
 
         if t.properties

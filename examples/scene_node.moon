@@ -50,8 +50,6 @@ Love\connect "load", (args) ->
     --t\start!
     t\connect "finished", ->
 
-
-
         node.scheduler\delayed 1, ->
 
 
