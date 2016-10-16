@@ -28,7 +28,8 @@ class NodeSprite extends SceneNode
 
     --- @brief Create a new instance from a building table.
     ---
-    --- @param t :
+    --- @param t : The building table.
+    ---
     new: (t = {}) =>
 
         super t
