@@ -68,6 +68,24 @@ class Color extends Object
             :r, :g, :b
         }
 
+    ---@brief Create a new instance from a table of data(r, g, b)
+    ---
+    --- Syntax:
+    ---   - Color\fromData {r: number, g: number, b: number}
+    ---
+    --- @param data : Table of numbers(r, g, b)
+    ---
+    --- @return The created color.
+    ---
+
+    @fromData: (data) =>
+
+      return Color {
+        r: data.r,
+        g: data.g,
+        b: data.b
+      }
+
 
     --- @brief Create a copy of the given instance.
     ---
@@ -95,8 +113,16 @@ class Color extends Object
             :r, :g, :b
         }, a
 
-
-
+    --- @brief Get the serialization of the color.
+    ---
+    --- @return The serialized color as a table {r: number, g: number, b: number}.
+    ---
+    getData: =>
+      return {
+        r: @r,
+        g: @g,
+        b: @b
+      }
 
     --- @brief Clamps the color components to 0 - 255.
     ---

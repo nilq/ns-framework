@@ -57,6 +57,19 @@ class Vector extends Object
 
         return Vector {:x, :y}
 
+    ---@brief Create a new instance from a table of data(x, y)
+    ---
+    --- Syntaxes:
+    ---   - Vector\fromData {x: number, y: number}
+    ---   - Vector\fromData {x: number}
+    ---
+    --- @param data : Table of positions(x, y)
+    ---
+    --- @return The created vector.
+    ---
+    @fromData: (data) =>
+
+      return Vector {x: data.x, y: data.y or data.x}
 
     --- @brief Create a copy of the given instance.
     ---
@@ -126,7 +139,12 @@ class Vector extends Object
 
         return sqrt @x*@x + @y*@y
 
-
+    --- @brief Get the serialization of the vector.
+    ---
+    --- @return The serialized vector as a table {x: number, y: number}.
+    ---
+    getData: =>
+      return {x: @x, y: @y}
 
 
     --- @brief Get the inverted vector of the current instance.
@@ -297,9 +315,27 @@ class Rectangle extends Object
 
         if t.center
 
-            @set "center", t.center
+    @set "center", t.center
 
+    ---@brief Create a new instance from a table of data(a, b)
+    ---
+    --- Syntax:
+    ---   - Rectangle\fromData {a: vector, b: vector}
+    ---
+    --- @param data : Table of positions(a, b)
+    ---
+    --- @return The created rectangle.
+    ---
+    @fromData: (data) =>
 
+      return Rectangle {a: data.a, b: data.b}
+
+    --- @brief Get the serialization of the rectangle.
+    ---
+    --- @return The serialized rectangle as a table {a: vector, b: vector}.
+    ---
+    getData: =>
+      return {a: @a, b: @b}
 
 
     --- @brief @get "size"
