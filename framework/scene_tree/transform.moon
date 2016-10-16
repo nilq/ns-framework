@@ -57,6 +57,7 @@ class Vector extends Object
 
         return Vector {:x, :y}
 
+
     ---@brief Create a new instance from a table of data(x, y)
     ---
     --- Syntaxes:
@@ -69,7 +70,8 @@ class Vector extends Object
     ---
     @fromData: (data) =>
 
-      return Vector {x: data.x, y: data.y or data.x}
+        return Vector {x: data.x, y: data.y or data.x}
+
 
     --- @brief Create a copy of the given instance.
     ---
@@ -138,8 +140,8 @@ class Vector extends Object
     length: =>
 
         return sqrt @x*@x + @y*@y
-        
-        
+
+
 
     --- @brief Get the serialization of the vector.
     ---
@@ -147,6 +149,8 @@ class Vector extends Object
     ---
     getData: =>
       return {x: @x, y: @y}
+
+
 
 
     --- @brief Get the inverted vector of the current instance.
