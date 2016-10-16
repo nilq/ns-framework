@@ -59,6 +59,7 @@ class NodeSprite extends SceneNode
 
 
 
+
     --- @brief Draw the sprite.
     ---
     _draw: =>
