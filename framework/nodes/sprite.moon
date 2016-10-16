@@ -7,6 +7,7 @@ import SceneNode, Vector, Transform from require "framework.scene_tree"
 lg = love.graphics
 
 
+
 --- @brief A simple 2D sprite.
 ---
 --- Public members :
