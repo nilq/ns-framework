@@ -5,7 +5,7 @@ class Backend
   ---
   --- @param data : serialized data.
   ---
-  @save_data: (data) =>
+  @save: (data) =>
 
   --- @brief Load the given data.
   ---
