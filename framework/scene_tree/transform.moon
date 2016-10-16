@@ -315,7 +315,7 @@ class Rectangle extends Object
 
         if t.center
 
-    @set "center", t.center
+            @set "center", t.center
 
     ---@brief Create a new instance from a table of data(a, b)
     ---
@@ -335,6 +335,7 @@ class Rectangle extends Object
     --- @return The serialized rectangle as a table {a: vector, b: vector}.
     ---
     getData: =>
+
       return {a: @a, b: @b}
 
 

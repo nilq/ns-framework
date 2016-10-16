@@ -36,7 +36,7 @@ Love\connect "load", (args) ->
     node = TextNode {
         text: "SceneNode example"
 
-        position: Vector\from 100, 100
+        position: Vector\fromData {x: 100}
     }
 
 
