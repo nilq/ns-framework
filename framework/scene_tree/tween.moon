@@ -207,17 +207,17 @@ class Tween extends Object
 
         if t == 0
 
-            @reference.value = @start_value
+            @reference\set "value", @start_value
 
         elseif t == 1
 
-            @reference.value = @end_value
+            @reference\set "value", @end_value
 
         else
 
             v = @start_value + (@end_value - @start_value) * @.easing t
 
-            @reference.value = v
+            @reference\set "value", v
 
 
 

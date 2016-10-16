@@ -26,8 +26,6 @@ class Example extends Object
 
     setFirst: (v) =>
 
-        print "prop"
-
         @_first = v
         return v
 

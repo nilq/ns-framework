@@ -111,8 +111,13 @@ class MemberReference extends ObjectReference
 
             return false
 
+        if @_object.ref.get != nil
 
-        return @_object.ref[@member] != nil
+            return @_object.ref\get(@member) != nil
+
+        else
+
+            return @_object.ref[@member] != nil
 
 
 
@@ -127,7 +132,14 @@ class MemberReference extends ObjectReference
 
             error "Invalid reference."
 
-        return @_object.ref[@member]
+
+        if @_object.ref.get != nil
+
+            return @_object.ref\get(@member)
+
+        else
+
+            return @_object.ref[@member]
 
 
     --- @brief Set the value of the referenced member.
@@ -141,7 +153,15 @@ class MemberReference extends ObjectReference
 
             error "Invalid reference."
 
-        @_object.ref[@member] = v
+
+        if @_object.ref.get != nil
+
+            @_object.ref\set @member, v
+
+        else
+
+            @_object.ref[@member] = v
+
         return v
 
 
@@ -157,7 +177,17 @@ class MemberReference extends ObjectReference
 
             error "Invalid reference."
 
-        mem = @_object.ref[@member]
+        mem = nil
+        
+
+        if @_object.ref.get != nil
+
+            mem = @_object.ref\get(@member)
+
+        else
+
+            mem = @_object.ref[@member]
+
 
         if type(mem) != "function"
 
