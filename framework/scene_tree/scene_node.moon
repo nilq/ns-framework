@@ -62,8 +62,6 @@ class SceneNode extends Object
         @apply_transform_only_for_children = @_opt t.transform_for_children, true
         @transform = @_opt t.transform, Transform!
 
-        print @, @transform
-
         @children = @_opt t.children, {}
         @tweens = {}
 
