@@ -62,6 +62,8 @@ class SceneNode extends Object
         @apply_transform_only_for_children = @_opt t.transform_for_children, true
         @transform = @_opt t.transform, Transform!
 
+        print @, @transform
+
         @children = @_opt t.children, {}
         @tweens = {}
 
@@ -192,6 +194,7 @@ class SceneNode extends Object
         for i, idx in ipairs tmp
 
             tbl.remove @tweens, idx - i + 1
+
 
 
         if @can_process

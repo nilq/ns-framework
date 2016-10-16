@@ -20,10 +20,10 @@ class Scheduler
 
     --- @brief Delay a function call.
     ---
-    --- @param f : The function to call.
     --- @param time : The time before the call.
+    --- @param f : The function to call.
     ---
-    delayed: (f, time) =>
+    delayed: (time, f) =>
 
         ent = {
             func: f
@@ -31,7 +31,7 @@ class Scheduler
         }
 
 
-        tbl.insert ent
+        tbl.insert @list, ent
 
 
     --- @brief Call the given function in the idle time.
@@ -46,7 +46,7 @@ class Scheduler
         }
 
 
-        tbl.insert ent
+        tbl.insert @list, ent
 
 
 
