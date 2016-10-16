@@ -745,6 +745,22 @@ class Transform extends Object
             @rotation = t.r
 
 
+    --- @brief Create a new copy of the given instance.
+    ---
+    --- @param other : The instance to copy.
+    --- @return The created instance.
+    ---
+    @copy: (other) =>
+
+        return Transform {
+            position: Vector\copy other.position
+            origin: Vector\copy other.origin
+            scale: Vector\copy other.scale
+            shear: Vector\copy other.shear
+            rotation: other.rotation
+        }
+
+
 
 
     --- @brief Get the transform into the love.graphics.draw format.
