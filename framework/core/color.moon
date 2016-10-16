@@ -112,6 +112,9 @@ class Color extends Object
         return Color {
             :r, :g, :b
         }, a
+        
+        
+        
 
     --- @brief Get the serialization of the color.
     ---
