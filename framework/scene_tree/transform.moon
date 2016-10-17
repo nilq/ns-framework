@@ -106,7 +106,7 @@ class Vector extends Object
 
     --- @brief Get the right vector.
     ---
-    --- @return The bottom vector (1; 0).
+    --- @return The right vector (1; 0).
     ---
     @right: =>
 
@@ -115,7 +115,7 @@ class Vector extends Object
 
     --- @brief Get the left vector.
     ---
-    --- @return The bottom vector (-1; 0).
+    --- @return The left vector (-1; 0).
     ---
     @left: =>
 
@@ -143,6 +143,7 @@ class Vector extends Object
 
 
 
+
     --- @brief Get the serialization of the vector.
     ---
     --- @return The serialized vector as a table {x: number, y: number}.
@@ -165,11 +166,13 @@ class Vector extends Object
         y = 0
 
         if x != 0
+
             x = 1 / @x
 
         if y != 0
 
             y = 1 / @y
+
 
         return Vector {:x, :y}
 
@@ -182,10 +185,11 @@ class Vector extends Object
     ---
     invert: =>
 
-        if x != 0
+        if @x != 0
+
             @x = 1 / @x
 
-        if y != 0
+        if @y != 0
 
             @y = 1 / @y
 
