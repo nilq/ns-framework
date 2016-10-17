@@ -1,5 +1,5 @@
 
-import Color from require "framework.core"
+import Color, Love from require "framework.core"
 
 import SceneNode, Vector, Transform from require "framework.scene_tree"
 
@@ -71,6 +71,9 @@ class NodeSprite extends SceneNode
         size_scaling = @size / @get("sprite-size")
         trans.scale *= size_scaling
 
+        Love\set "color", @color
+        Love\set "alpha", @getSelfAlpha!
+
         if quad == nil
 
             lg.draw @image, trans\toArgs!
@@ -105,3 +108,18 @@ class NodeSprite extends SceneNode
     setSpriteSize: =>
 
         error "Can't set the size of the image."
+
+
+
+
+    --- @brief Center the origin of the sprite in the middle of the image.
+    ---
+    centerOrigin: =>
+
+        @transform.origin = @get("sprite-size") / 2
+
+
+
+{
+    :NodeSprite
+}
