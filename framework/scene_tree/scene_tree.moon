@@ -1,6 +1,7 @@
 
-import Love, Vector from require "framework.core"
+import Love from require "framework.core"
 
+import Vector from require "framework.scene_tree.transform"
 import SceneNode from require "framework.scene_tree.scene_node"
 
 
@@ -12,6 +13,9 @@ lg = love.graphics
 ---
 --- Properties:
 ---   - size [get] : Get the size of the window.
+---
+--- Signals:
+---   - resized() : Called when the window is resized.
 ---
 class _SceneTree extends SceneNode
 
@@ -28,6 +32,9 @@ class _SceneTree extends SceneNode
                 {"size", "getSize", "setSize"}
             }
 
+            signals: {
+                "resized"
+            }
         }
 
         @in_tree = true
@@ -55,6 +62,23 @@ class _SceneTree extends SceneNode
 
 
 SceneTree = _SceneTree!
+
+
+
+Love\connect "process", (dt) ->
+
+    SceneTree\process dt
+
+
+Love\connect "draw", ->
+
+    SceneTree\draw!
+
+
+Love\connect "resize", ->
+
+    SceneTree\emit "resized"
+
 
 
 {

@@ -57,6 +57,7 @@ class Vector extends Object
 
         return Vector {:x, :y}
 
+
     ---@brief Create a new instance from a table of data(x, y)
     ---
     --- Syntaxes:
@@ -69,7 +70,8 @@ class Vector extends Object
     ---
     @fromData: (data) =>
 
-      return Vector {x: data.x, y: data.y or data.x}
+        return Vector {x: data.x, y: data.y or data.x}
+
 
     --- @brief Create a copy of the given instance.
     ---
@@ -104,7 +106,7 @@ class Vector extends Object
 
     --- @brief Get the right vector.
     ---
-    --- @return The bottom vector (1; 0).
+    --- @return The right vector (1; 0).
     ---
     @right: =>
 
@@ -113,7 +115,7 @@ class Vector extends Object
 
     --- @brief Get the left vector.
     ---
-    --- @return The bottom vector (-1; 0).
+    --- @return The left vector (-1; 0).
     ---
     @left: =>
 
@@ -140,6 +142,10 @@ class Vector extends Object
         return sqrt @x*@x + @y*@y
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 81712a54a0b19f8c5a4e9d3d96a00afae84e38ec
 
     --- @brief Get the serialization of the vector.
     ---
@@ -147,6 +153,8 @@ class Vector extends Object
     ---
     getData: =>
       return {x: @x, y: @y}
+
+
 
 
     --- @brief Get the inverted vector of the current instance.
@@ -160,12 +168,14 @@ class Vector extends Object
         x = 0
         y = 0
 
-        if x != 0
+        if @x != 0
+
             x = 1 / @x
 
-        if y != 0
+        if @y != 0
 
             y = 1 / @y
+
 
         return Vector {:x, :y}
 
@@ -178,10 +188,11 @@ class Vector extends Object
     ---
     invert: =>
 
-        if x != 0
+        if @x != 0
+
             @x = 1 / @x
 
-        if y != 0
+        if @y != 0
 
             @y = 1 / @y
 
@@ -743,6 +754,22 @@ class Transform extends Object
         if t.r
 
             @rotation = t.r
+
+
+    --- @brief Create a new copy of the given instance.
+    ---
+    --- @param other : The instance to copy.
+    --- @return The created instance.
+    ---
+    @copy: (other) =>
+
+        return Transform {
+            position: Vector\copy other.position
+            origin: Vector\copy other.origin
+            scale: Vector\copy other.scale
+            shear: Vector\copy other.shear
+            rotation: other.rotation
+        }
 
 
 

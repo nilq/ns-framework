@@ -1,2 +1,2 @@
 
-require "examples.scene_node"
+require "examples.control"

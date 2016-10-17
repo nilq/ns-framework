@@ -87,14 +87,16 @@ class MemberReference extends ObjectReference
     ---
     --- @param obj : The referenced object.
     --- @param member_name : The name of the referenced member.
+    --- @param force_member : Force the use of a member (disallow properties).
     ---
-    new: (obj, member_name) =>
+    new: (obj, member_name, force_member = false) =>
 
         super obj
 
         @type = "MemberReference"
 
         @member = member_name
+        @force_member = force_member
 
         @property "value", "getValue", "setValue"
 
@@ -111,7 +113,7 @@ class MemberReference extends ObjectReference
 
             return false
 
-        if @_object.ref.get != nil
+        if @_object.ref.get != nil and not @force_member
 
             return @_object.ref\get(@member) != nil
 
@@ -133,7 +135,7 @@ class MemberReference extends ObjectReference
             error "Invalid reference."
 
 
-        if @_object.ref.get != nil
+        if @_object.ref.get != nil and not @force_member
 
             return @_object.ref\get(@member)
 
@@ -154,7 +156,7 @@ class MemberReference extends ObjectReference
             error "Invalid reference."
 
 
-        if @_object.ref.get != nil
+        if @_object.ref.get != nil and not @force_member
 
             @_object.ref\set @member, v
 
@@ -178,9 +180,9 @@ class MemberReference extends ObjectReference
             error "Invalid reference."
 
         mem = nil
-        
 
-        if @_object.ref.get != nil
+
+        if @_object.ref.get != nil and not force_member
 
             mem = @_object.ref\get(@member)
 

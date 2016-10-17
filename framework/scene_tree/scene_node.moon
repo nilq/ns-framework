@@ -143,14 +143,17 @@ class SceneNode extends Object
 
     --- @brief Method called when the node exits the scene tree.
     ---
-    _exitTree: =>
+    --- @param old_parent : The old parent which removed the current instance
+    ---        (nil if the node is still in its parent).
+    ---
+    _exitTree: (old_parent) =>
 
         for child in *@children
 
-            child\_exitTree!
+            child\_exitTree nil
 
 
-        @emit "exit-tree", self
+        @emit "exit-tree", self, old_parent
 
 
     --- @brief Method called when the node is in the scene tree and when all
@@ -221,7 +224,7 @@ class SceneNode extends Object
 
         if @is_spatial and not @apply_transform_only_for_children
 
-            @transform\apply!
+            @get("transform")\apply!
             transform_applied = true
 
 
@@ -235,7 +238,7 @@ class SceneNode extends Object
 
             if @is_spatial and @apply_transform_only_for_children
 
-                @transform\apply!
+                @get("transform")\apply!
                 transform_applied = true
 
             for child in *@children
@@ -245,7 +248,7 @@ class SceneNode extends Object
 
         if transform_applied
 
-            @transform\undo!
+            @get("transform")\undo!
 
 
 
@@ -414,7 +417,7 @@ class SceneNode extends Object
 
         if @in_tree
 
-            child\_exitTree!
+            child\_exitTree @
 
 
         for i = index, #@children

@@ -115,10 +115,22 @@ class Color extends Object
             :r, :g, :b
         }, a
 
+
+
+
+
     --- @brief Get the serialization of the color.
     ---
     --- @return The serialized color as a table {r: number, g: number, b: number}.
     ---
+    getData: =>
+
+        return {
+            r: @r,
+            g: @g,
+            b: @b
+        }
+
 
     --- @brief Clamps the color components to 0 - 255.
     ---
