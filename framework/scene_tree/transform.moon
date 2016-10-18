@@ -144,6 +144,7 @@ class Vector extends Object
 
 
 
+
     --- @brief Get the serialization of the vector.
     ---
     --- @return The serialized vector as a table {x: number, y: number}.
