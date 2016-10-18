@@ -1,3 +1,4 @@
+
 import Backend from require "framework.data.backend"
 
 --- @brief Recursively generate INI synatx from table.
