@@ -1,14 +1,14 @@
 import Backend from require "framework.data.backend"
 
-table_gen = (list, keys, n) ->
-    n = n or 1
-    list[keys[n]] = {}
-
-    if #keys != n then
-        n += 1
-        table_gen list[keys[n - 1]], keys, n
-
-parse_ini = (data, rec_sec) ->
+--- @brief Recursively generate INI synatx from table.
+---
+--- @param data : The table of data.
+---
+--- @param rec_sec : Analyzed section content (for internal use).
+---
+--- @return The generated INI content as a string.
+---
+generate_ini = (data, rec_sec) ->
     output = ""
     for section, param in pairs data
         if "table" == type param
@@ -18,27 +18,66 @@ parse_ini = (data, rec_sec) ->
                 output ..= ("\n[%s.%s]\n")\format rec_sec, section
             for k, v in pairs param
                 unless "table" == type v
-                    output ..= ("%s = %s\n")\format k, tostring v
+                    if "string" == type v
+                        output ..= ("%s = \"%s\"\n")\format k, tostring v
+                    else
+                        output ..= ("%s = %s\n")\format k, tostring v
                 else
                     unless rec_sec
                         rec_sec = ("%s.%s")\format section, k
                     else
                         rec_sec = ("%s.%s.%s")\format rec_sec, section, k
                     output ..= ("\n[%s]\n")\format rec_sec
-                    output ..= parse_ini v, rec_sec
+                    output ..= generate_ini v, rec_sec
         else
-            output ..= ("%s = %s\n")\format section, tostring param
+            if "string" == type param
+                output ..= ("%s = \"%s\"\n")\format section, tostring param
+            else
+                output ..= ("%s = %s\n")\format section, tostring param
 
     output
 
-class IniBackend
-    new: (@namespace = "data") =>
 
+--- @brief Data backend for handling INI data.
+---
+--- Building table parameters :
+---   - namespace : The namespace from which to load and save data (optional).
+---   - path : The path to from which to load and save data (optional).
+---
+class IniBackend extends Backend
+
+
+    --- @brief Create new instance from a building table.
+    ---
+    --- @param t : The building table.
+    ---
+    new: (t = {}) =>
+
+        super t
+
+        @type = "DataBackend"
+
+        @path = @_opt t.path, nil
+        @namespace = @_opt t.namespace, "data"
+
+
+
+    --- @brief Save given table to specified path, as INI data.
+    ---
+    --- @param data : The data to save.
+    ---
+    --- @return The generated INI data (convenience)
+    ---
     save: (data) =>
-        ini_data = parse_ini {[@namespace]: data}
+        ini_data = generate_ini {[@namespace]: data}
         love.filesystem.write @path, ini_data
         ini_data
 
+
+    --- @brief Load data from specified path and parse as INI data.
+    ---
+    --- @return Namespace of table generated from loaded INI file (namespace defaults to 'data').
+    ---
     load: =>
         data = love.filesystem.read @path
 
@@ -62,10 +101,14 @@ class IniBackend
             if p and v
                 if tonumber v
                     v = v
-                elseif v == "true"
+                elseif v\match "true"
                     v = true
-                elseif v == "false"
+                elseif v\match "false"
                     v = false
+                elseif v\match "\".-\""
+                    v = v\match "\"(.-)\""
+                else
+                    error "unexpected value: " .. v
 
                 if tonumber p
                     p = tonumber p
@@ -77,9 +120,16 @@ class IniBackend
                         t = t[w]
                     else
                         t[w][p] = v
+            else
+                unless temp_section or "" == line\gsub "^%s*(.-)%s*$", "%1"
+                    error "failed trying to match line: " .. line
 
         output[@namespace]
 
+
+
+    ---@brief Sets the path of the backend (required for loading/saving)
+    ---
     setPath: (@path) =>
 
 {

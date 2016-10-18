@@ -13,15 +13,14 @@ test_data = {
                 please_work: "yay!",
                 yep_its_working_nicely: {
                     really: true,
-                    reallyreally: "almost sure now ..!",
-                    inverted: "wut?",
-                    what_order_is_this: false,
                 }
             },
         },
     },
 }
 
-ini_pipe\save test_data
+ini = ini_pipe\save test_data
 
-print ini_pipe\load!.nested.key -- stdout > "value"
+print ini
+
+assert ini_pipe\load!.nested.key, "value"
