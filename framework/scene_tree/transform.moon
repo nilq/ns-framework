@@ -142,10 +142,8 @@ class Vector extends Object
         return sqrt @x*@x + @y*@y
 
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 81712a54a0b19f8c5a4e9d3d96a00afae84e38ec
+
 
     --- @brief Get the serialization of the vector.
     ---

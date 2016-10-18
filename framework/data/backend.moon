@@ -2,7 +2,7 @@
 
 --- @brief Generic backend for data pipeline.
 ---
-class Backends
+class Backend
 
 
     --- @brief Create a new instance.
