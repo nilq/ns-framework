@@ -10,4 +10,5 @@ mix_table {
     require "framework.nodes.controls.control"
     require "framework.nodes.controls.panel"
     require "framework.nodes.controls.gui_controller"
+    require "framework.nodes.controls.theme"
 }

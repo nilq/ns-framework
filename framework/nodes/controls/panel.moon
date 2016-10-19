@@ -37,11 +37,31 @@ class NodePanel extends NodeControl
         super t
 
 
-        @border_width = @_opt t.border_width, 0
-        @border_color = @_opt t.border_color, Color!
-        @border_radius = @_opt t.border_radius, 0
+        if t.theme
 
-        @background_color = @_opt t.background_color, Color!
+            @border_width = t.theme.panel.border_width
+            @border_color = t.theme.panel.border_color
+            @border_radius = t.theme.panel.border_radius
+
+            @background_color = t.theme.panel.background_color
+
+
+        if t.border_width
+
+            @border_width = t.border_width
+
+        if t.border_color
+
+            @border_color = t.border_color
+
+        if t.border_radius
+
+            @border_radius = t.border_radius
+
+        if t.background_color
+
+            @background_color = t.background_color
+
 
         @apply_transform_only_for_children = false
 

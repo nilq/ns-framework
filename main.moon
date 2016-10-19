@@ -1,2 +1,2 @@
 
-require "examples.control"
+require "examples.theme"
