@@ -129,7 +129,7 @@ class Vector extends Object
     ---
     --- @return The angnle between the two vectors (a, b).
     ---
-    @angle_between: (a, b) =>
+    @angleBetween: (a, b) =>
         cross = a.x * b.y - a.y * b.x
         dot   = a.x * b.x + a.y * b.y
 
@@ -217,7 +217,7 @@ class Vector extends Object
     ---
     --- @return The angle between the vector and the other (b).
     ---
-    angle_between: (b) =>
+    angleBetween: (b) =>
         cross = @x * b.y - @y * b.x
         dot   = @x * b.x + @y * b.y
 
