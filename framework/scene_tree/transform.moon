@@ -122,6 +122,20 @@ class Vector extends Object
         return Vector {x: -1, y: 0}
 
 
+    --- @brief Get the angle between two vectors.
+    ---
+    --- @param a : The first vector.
+    --- @param b : The second vector.
+    ---
+    --- @return The angnle between the two vectors (a, b).
+    ---
+    @angle_between: (a, b) =>
+        cross = a.x * b.y - a.y * b.x
+        dot   = a.x * b.x + a.y * b.y
+
+        (math.atan2 cross, dot)
+
+
 
 
     --- @brief Get the squared length of the vector.
@@ -196,6 +210,44 @@ class Vector extends Object
 
 
         return @
+
+    --- @brief Get the angle between the vector and another.
+    ---
+    --- @param b : The vector to get angle to.
+    ---
+    --- @return The angle between the vector and the other (b).
+    ---
+    angle_between: (b) =>
+        cross = @x * b.y - @y * b.x
+        dot   = @x * b.x + @y * b.y
+
+        (math.atan2 cross, dot)
+
+
+
+    --- @brief Get rotated copy of the vector.
+    ---
+    --- @param a : The angle of rotation.
+    ---
+    --- @return The rotated copy of the vector.
+    ---
+    rotated: (a) =>
+        return Vector {
+            @x * (math.cos a) - @y * math.sin a,
+            @x * (math.sin a) - @y * math.cos a,
+        }
+
+    --- @brief Rotate the vector by a given angle.
+    ---
+    --- @param a : The angle of rotation.
+    ---
+    --- @return The newly rotated vector.
+    ---
+    rotate: (a) =>
+        @x = @x * (math.cos a) - @y * math.sin a
+        @y = @x * (math.sin a) - @y * math.cos a
+
+        @
 
 
 
