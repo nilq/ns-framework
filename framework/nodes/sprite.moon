@@ -72,7 +72,7 @@ class NodeSprite extends SceneNode
         trans.scale *= size_scaling
 
         Love\set "color", @color
-        Love\set "alpha", @getSelfAlpha!
+        Love\set "alpha", @getSelfAlpha! * 255
 
         if quad == nil
 

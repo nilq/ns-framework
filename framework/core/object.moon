@@ -146,6 +146,30 @@ class Object
         @signals[name]\connect f, one_shot, differed
 
 
+    --- @brief Conenct a method to a signal.
+    ---
+    --- @param name : The signal's name.
+    --- @param method : The method to connect.
+    --- @param one_shot : The function will be called once ? (false by default)
+    --- @param differed : Differate the function call (false by default)
+    ---
+    _connect: (name, method, one_shot = false, differed = false) =>
+
+        unless @signals[name] != nil
+
+            error "No signal #{name}"
+
+        obj = @
+        f = (...) ->
+
+            obj[method] obj, ...
+
+
+        @signals[name]\connect f, one_shot, differed
+
+        return f
+
+
     --- @brief Disconnect a function from a signal.
     ---
     --- @param name : The signal's name.

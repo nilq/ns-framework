@@ -51,7 +51,7 @@ class NodeText extends SceneNode
     _draw: =>
 
         Love\set "color", @color
-        Love\set "alpha", @getSelfAlpha!
+        Love\set "alpha", @getSelfAlpha! * 255
 
 
         lg.setFont @font

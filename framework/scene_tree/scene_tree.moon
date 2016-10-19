@@ -3,6 +3,7 @@ import Love from require "framework.core"
 
 import Vector from require "framework.scene_tree.transform"
 import SceneNode from require "framework.scene_tree.scene_node"
+import Event from require "framework.scene_tree.event"
 
 
 lg = love.graphics
@@ -79,6 +80,22 @@ Love\connect "resize", ->
 
     SceneTree\emit "resized"
 
+
+
+-- TODO: Handles "framework.scene_tree.events_for_love"
+
+Love\connect "mouse-moved", (x, y, dx, dy, istouch) ->
+
+    ev = Event "mouse-moved", x, y, dx, dy, istouch
+
+    SceneTree\event ev
+
+
+Love\connect "mouse-pressed", (x, y, button, istouch) ->
+
+    ev = Event "mouse-pressed", x, y, button, istouch
+
+    SceneTree\event ev
 
 
 {

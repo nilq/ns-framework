@@ -1,7 +1,9 @@
 
 import MemberReference from require "framework.core"
 
-import SceneNode, Vector from require "framework.scene_tree"
+import SceneNode, Vector, Rectangle, SceneTree from require "framework.scene_tree"
+
+import GuiController from require "framework.nodes.controls.gui_controller"
 
 
 
@@ -63,6 +65,10 @@ class NodeControl extends SceneNode
     ---
     new: (t = {}) =>
 
+        unless t.position == nil
+            t.pos = t.position
+            t.position = nil
+
         super t
 
         @is_spatial = true
@@ -88,6 +94,16 @@ class NodeControl extends SceneNode
         @custom_pos_setter = nil
         @custom_size_setter = nil
 
+        @control_depth = 0
+
+        @stop_mouse = false
+        @receive_focus = false
+
+        @receive_events = true
+
+        @hovered = false
+        @focused = false
+
 
         @property "position", "getPosition", "setPosition"
         @property "size", "getSize", "setSize"
@@ -104,6 +120,24 @@ class NodeControl extends SceneNode
 
         @addSignal "resized"
 
+        @addSignal "mouse-enter"
+        @addSignal "mouse-exit"
+        @addSignal "focus-gain"
+        @addSignal "focus-lost"
+
+
+        @addEventHandler "mouse-moved", "_onMouseMoved"
+        @addEventHandler "mouse-pressed", "_onMousePressed"
+
+
+        if t.pos
+
+            @_pos = t.pos
+
+        if t.size
+
+            @_size = t.size
+
 
 
 
@@ -115,6 +149,26 @@ class NodeControl extends SceneNode
 
         @_resized_ref = MemberReference @, "_onParentResized"
         @parent\connect "resized", @_resized_ref
+
+
+        if @_pos
+
+            @set "position", @_pos
+            @_pos = nil
+
+        if @_size
+
+            @set "size", @_size
+            @_size = nil
+
+
+        @control_depth = 0
+        parent = @parent
+
+        while parent != nil
+
+            @control_depth += 1
+            parent = parent.parent
 
 
     --- @brief Called when the node exits the tree.
@@ -131,11 +185,80 @@ class NodeControl extends SceneNode
             @_resized_ref = nil
 
 
+
+
     --- @brief Called when the parent resizes.
     ---
     _onParentResized: =>
 
         @_margin_modified = true
+
+
+
+
+    --- @brief Called when the mouse is moved.
+    ---
+    --- @param ev : The event.
+    ---
+    _onMouseMoved: (ev) =>
+
+        m_pos = Vector\from ev.args[1], ev.args[2]
+
+        fvec = @getFinalInvertedTransform!\transformVector m_pos
+        rect = Rectangle!
+
+        rect.b = @get "size"
+
+        if rect\contains(fvec) and not @hovered
+
+            @hovered = true
+            @emit "mouse-enter"
+
+            if @stop_mouse
+
+                ev.stop_propagation = true
+
+
+        else if not rect\contains(fvec) and @hovered
+
+            @hovered = false
+            @emit "mouse-exit"
+
+
+    --- @brief Called when a mouse is pressed.
+    ---
+    --- @param ev : The event.
+    ---
+    _onMousePressed: (ev) =>
+
+        m_pos = Vector\from ev.args[1], ev.args[2]
+
+        fvec = @getFinalInvertedTransform!\transformVector m_pos
+        rect = Rectangle!
+
+        rect.b = @get "size"
+
+        if rect\contains(fvec)
+
+            if GuiController\requestFocus @
+
+                ev.stop_propagation = true
+
+
+        else
+
+            GuiController\releaseFocus @
+
+
+
+
+    --- @brief Says if the control should keep the focus.
+    ---
+    --- @return True if the control should keep the focus.
+    ---
+    keepFocus: =>
+
+        return false
 
 
 
@@ -237,9 +360,6 @@ class NodeControl extends SceneNode
             resized = true
 
 
-        @_margin_modified = false
-
-
 
         if pos_changed
 
@@ -249,7 +369,7 @@ class NodeControl extends SceneNode
 
             else
 
-                @transform.position = pos
+                @transform\set "position", pos
 
 
         if resized
@@ -263,6 +383,9 @@ class NodeControl extends SceneNode
                 @size = size
 
             @emit "resized"
+
+
+        @_margin_modified = false
 
 
 
@@ -318,7 +441,7 @@ class NodeControl extends SceneNode
 
         @_updateMargin {skip_left: true, skip_top: true}
 
-        @transform.position = v
+        @transform\set "position", v
 
 
 
