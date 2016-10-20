@@ -27,4 +27,4 @@ class Activator extends Object
     ---
     --- @return The serialiation as table.
     ---
-    @getData: =>
+    getData: =>
