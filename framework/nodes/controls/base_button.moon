@@ -28,6 +28,7 @@ class NodeBaseButton extends NodeControl
 
 
 
+
     --- @brief Create a new instance from a building table.
     ---
     --- @param t : The building table.
@@ -36,12 +37,17 @@ class NodeBaseButton extends NodeControl
 
         super t
 
+        @type = "NodeBaseButton"
+
+
         @state = @@State.none
 
         @stop_mouse = true
 
 
         @addSignal "clicked"
+        @addSignal "state-changed"
+
 
         @addEventHandler "mouse-pressed", "_onMousePressed"
         @addEventHandler "mouse-released", "_onMouseReleased"
@@ -60,6 +66,7 @@ class NodeBaseButton extends NodeControl
         if @state == @@State.none
 
             @state = @@State.hovered
+            @emit "state-changed"
 
 
     --- @brief Called when the mouse exits the control.
@@ -69,6 +76,7 @@ class NodeBaseButton extends NodeControl
         if @state == @@State.hovered
 
             @state = @@State.none
+            @emit "state-changed"
 
 
 
@@ -97,6 +105,7 @@ class NodeBaseButton extends NodeControl
         if rect\contains(fvec)
 
             @state = @@State.clicked
+            @emit "state-changed"
             @emit "clicked"
 
             if @stop_mouse
@@ -132,6 +141,9 @@ class NodeBaseButton extends NodeControl
             else
 
                 @state = @@State.none
+
+
+            @emit "state-changed"
 
 
 

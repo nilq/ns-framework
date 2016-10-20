@@ -45,8 +45,6 @@ class Color extends Object
         @g = @_opt t.g, 255
         @b = @_opt t.b, 255
 
-        @clamp!
-
 
 
 
@@ -170,6 +168,12 @@ class Color extends Object
     ---
     __sub: (other) =>
 
+        if @type == nil
+
+            for k, v in pairs @
+
+                print k, v
+
         return Color {
             r: @r - other.r
             g: @g - other.g
@@ -191,9 +195,9 @@ class Color extends Object
 
         else
 
-            r = ((@r / 255) * (other.r / 255)) * 255
-            g = ((@g / 255) * (other.g / 255)) * 255
-            b = ((@b / 255) * (other.b / 255)) * 255
+            r = (@r * other.r) / 255
+            g = (@g * other.g) / 255
+            b = (@b * other.b) / 255
 
             return Color {
                 :r, :g, :b
@@ -214,9 +218,9 @@ class Color extends Object
 
         else
 
-            r = ((@r / 255) / (other.r / 255)) * 255
-            g = ((@g / 255) / (other.g / 255)) * 255
-            b = ((@b / 255) / (other.b / 255)) * 255
+            r = (@r / other.r) * 255
+            g = (@g / other.g) * 255
+            b = (@b / other.b) * 255
 
             return Color {
                 :r, :g, :b

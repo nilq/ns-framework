@@ -72,8 +72,26 @@ class NodeLabel extends NodeControl
         @apply_transform_only_for_children = false
 
 
+        if t.minimize
+
+            @_minimize = true
+
+
         @property "text", "getText", "setText"
         @property "font", "getFont", "setFont"
+
+
+
+
+    --- @brief Called when the node enters the scene tree.
+    ---
+    _enterTree: =>
+
+        super!
+
+        if @_minimize
+
+            @minimize!
 
 
 
@@ -153,6 +171,14 @@ class NodeLabel extends NodeControl
         @text_size.x = @font\getWidth @text
         @text_size.y = @font\getHeight!
 
+
+
+
+    --- @brief Minimize the control to the minimal size.
+    ---
+    minimize: =>
+
+        @set "size", @text_size + Vector\from(8, 8)
 
 
 

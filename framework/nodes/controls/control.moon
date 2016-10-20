@@ -77,9 +77,6 @@ class NodeControl extends SceneNode
 
         @is_spatial = true
 
-        @has_size = true
-
-
         @theme_section = ""
 
         @margin_left_type = @_opt t.margin_left_type, @@MarginType.fromLeft
@@ -99,8 +96,6 @@ class NodeControl extends SceneNode
 
         @custom_pos_setter = nil
         @custom_size_setter = nil
-
-        @control_depth = 0
 
         @stop_mouse = false
         @receive_focus = false
@@ -181,13 +176,6 @@ class NodeControl extends SceneNode
             @_size = nil
 
 
-        @control_depth = 0
-        parent = @parent
-
-        while parent != nil
-
-            @control_depth += 1
-            parent = parent.parent
 
 
     --- @brief Called when the node exits the tree.
@@ -341,42 +329,44 @@ class NodeControl extends SceneNode
             pos_changed = true
 
 
-        -- right
+        if @has_size
 
-        unless t.skip_right
+            -- right
 
-            if @margin_right_type == @@MarginType.fromLeft
+            unless t.skip_right
 
-                size.x = @margin_right - pos.x
+                if @margin_right_type == @@MarginType.fromLeft
 
-            elseif @margin_right_type == @@MarginType.fromRight
+                    size.x = @margin_right - pos.x
 
-                size.x = p_size.x - @margin_right - pos.x
+                elseif @margin_right_type == @@MarginType.fromRight
 
-            else
+                    size.x = p_size.x - @margin_right - pos.x
 
-                size.x = p_size.x * @margin_right - pos.x
+                else
 
-            resized = true
+                    size.x = p_size.x * @margin_right - pos.x
+
+                resized = true
 
 
-        -- bottom
+            -- bottom
 
-        unless t.skip_bottom
+            unless t.skip_bottom
 
-            if @margin_bottom_type == @@MarginType.fromTop
+                if @margin_bottom_type == @@MarginType.fromTop
 
-                size.y = @margin_bottom - pos.y
+                    size.y = @margin_bottom - pos.y
 
-            elseif @margin_bottom_type == @@MarginType.fromBottom
+                elseif @margin_bottom_type == @@MarginType.fromBottom
 
-                size.y = p_size.y - @margin_bottom - pos.y
+                    size.y = p_size.y - @margin_bottom - pos.y
 
-            else
+                else
 
-                size.y = p_size.y * @margin_bottom - pos.y
+                    size.y = p_size.y * @margin_bottom - pos.y
 
-            resized = true
+                resized = true
 
 
 
@@ -469,6 +459,11 @@ class NodeControl extends SceneNode
     ---
     getSize: =>
 
+        unless @has_size
+
+            return Vector!
+
+
         if @_margin_modified
 
             @_updateMargin!
@@ -480,6 +475,11 @@ class NodeControl extends SceneNode
     --- @brief Set the size of the control.
     ---
     setSize: (v) =>
+
+        unless @has_size
+
+            return
+
 
         p_size = @parent\get "size"
 
