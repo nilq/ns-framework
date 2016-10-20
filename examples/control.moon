@@ -47,7 +47,6 @@ class NodeTest extends NodeControl
         if @dbg
 
             lg.setColor 255, 255, 255, 255
-            lg.print "Margin modified ? #{@_margin_modified}", 0, 0
 
 
 

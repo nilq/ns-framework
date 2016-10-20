@@ -76,6 +76,8 @@ class NodeControl extends SceneNode
         @has_size = true
 
 
+        @theme_section = ""
+
         @margin_left_type = @_opt t.margin_left_type, @@MarginType.fromLeft
         @margin_top_type = @_opt t.margin_top_type, @@MarginType.fromTop
         @margin_right_type = @_opt t.margin_right_type, @@MarginType.fromLeft
@@ -138,6 +140,19 @@ class NodeControl extends SceneNode
 
             @_size = t.size
 
+
+
+    _topt: (t, name, def) =>
+
+        if t[name]
+
+            return t[name]
+
+        if t.theme and t.theme[@theme_section] and t.theme[@theme_section][name]
+
+            return t.theme[@theme_section][name]
+
+        return def
 
 
 

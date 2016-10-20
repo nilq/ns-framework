@@ -36,31 +36,15 @@ class NodePanel extends NodeControl
 
         super t
 
+        @type = "NodePanel"
+        @theme_section = "panel"
 
-        if t.theme
+        @border_width = @_topt t, "border_width", 0
+        @border_color = @_topt t, "border_color", Color!
+        @border_radius = @_topt t, "border_radius", 0
 
-            @border_width = t.theme.panel.border_width
-            @border_color = t.theme.panel.border_color
-            @border_radius = t.theme.panel.border_radius
-
-            @background_color = t.theme.panel.background_color
-
-
-        if t.border_width
-
-            @border_width = t.border_width
-
-        if t.border_color
-
-            @border_color = t.border_color
-
-        if t.border_radius
-
-            @border_radius = t.border_radius
-
-        if t.background_color
-
-            @background_color = t.background_color
+        @background_color = @_topt t, "background_color", Color!
+        @background_alpha = @_topt t, "background_alpha", 1
 
 
         @apply_transform_only_for_children = false
@@ -72,7 +56,7 @@ class NodePanel extends NodeControl
     ---
     _draw: =>
 
-        Love\set "alpha", @getSelfAlpha! * 255
+        Love\set "alpha", @getSelfAlpha! * @background_alpha * 255
 
 
         Love\set "color", @background_color
@@ -87,6 +71,8 @@ class NodePanel extends NodeControl
 
             lg.setLineWidth 2
 
+
+        Love\set "alpha", @getSelfAlpha! * 255
         lg.rectangle "line", 0, 0, @size.x, @size.y, @border_radius
 
 
