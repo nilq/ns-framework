@@ -12,4 +12,5 @@ mix_table {
     require "framework.nodes.controls.control"
     require "framework.nodes.controls.panel"
     require "framework.nodes.controls.label"
+    require "framework.nodes.controls.base_button"
 }

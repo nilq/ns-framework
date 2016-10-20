@@ -98,6 +98,14 @@ Love\connect "mouse-pressed", (x, y, button, istouch) ->
     SceneTree\event ev
 
 
+Love\connect "mouse-released", (x, y, button, istouch) ->
+
+    ev = Event "mouse-released", x, y, button, istouch
+
+    SceneTree\event ev
+
+
+
 {
     :SceneTree
 }

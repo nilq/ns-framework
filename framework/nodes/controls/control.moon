@@ -31,6 +31,10 @@ import GuiController from require "framework.nodes.controls.gui_controller"
 ---
 --- Signals:
 ---   - resized() : Called when the control is resized.
+---   - mouse-enter() : Called when the mouse enters the control.
+---   - mouse-exit() : Called when the mouse exits the control.
+---   - focus-gain() : Called when the control gain the focus.
+---   - focus-lost() : Called when the control lost the focus.
 ---
 --- Building table:
 ---   - margin_left_type : The type of the left margin.
