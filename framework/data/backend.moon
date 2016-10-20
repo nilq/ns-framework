@@ -1,15 +1,17 @@
-
+import Object from require "framework.core"
 
 --- @brief Generic backend for data pipeline.
 ---
-class Backend
+class Backend extends Object
 
 
-    --- @brief Create a new instance.
+    --- @brief Create a new instance from a building table.
     ---
-    new: =>
+    --- @param t : The building table.
+    ---
+    new: (t = {}) =>
 
-
+        super t
 
     --- @brief Save the given data.
     ---
