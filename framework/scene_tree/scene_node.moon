@@ -64,6 +64,7 @@ class SceneNode extends Object
 
         @children = @_opt t.children, {}
         @tweens = {}
+        @events = {}
 
         @can_process = @_opt t.can_process, true
         @can_draw = @_opt t.can_draw, true
@@ -81,6 +82,8 @@ class SceneNode extends Object
 
         @in_tree = false
         @ready = false
+
+        @receive_events = true
 
 
         @property "position", "getPosition", "setPosition"
@@ -133,6 +136,7 @@ class SceneNode extends Object
             child\_enterTree!
 
 
+        @in_tree = true
         @emit "enter-tree", self
 
 
@@ -152,7 +156,7 @@ class SceneNode extends Object
 
             child\_exitTree nil
 
-
+        @in_tree = false
         @emit "exit-tree", self, old_parent
 
 
@@ -253,6 +257,32 @@ class SceneNode extends Object
 
 
 
+    --- @brief Handles an event.
+    ---
+    --- @param ev : The event.
+    ---
+    event: (ev) =>
+
+        for child in *@children
+
+            child\event ev
+
+            if ev.stop_propagation
+
+                return
+
+
+        if @events[ev.name] and @receive_events
+
+            @events[ev.name] @, ev
+
+            if ev.stop_propagation
+
+                return
+
+
+
+
     --- @brief Custom update function. Meant to be overloaded.
     ---
     --- @param dt : The delta-time.
@@ -263,6 +293,7 @@ class SceneNode extends Object
     --- @brief Custom draw function. Meant to be overloaded.
     ---
     _draw: =>
+
 
 
 
@@ -308,6 +339,7 @@ class SceneNode extends Object
     setPosition: (v) =>
 
         @transform.position = v
+        @transform\notifyChange!
 
 
     --- @brief Set the origin of the node.
@@ -315,6 +347,7 @@ class SceneNode extends Object
     setOrigin: (v) =>
 
         @transform.origin = v
+        @transform\notifyChange!
 
 
     --- @brief Set the scale of the node.
@@ -322,6 +355,7 @@ class SceneNode extends Object
     setScale: (v) =>
 
         @transform.scale = v
+        @transform\notifyChange!
 
 
     --- @brief Set the shearing of the node.
@@ -329,6 +363,7 @@ class SceneNode extends Object
     setShear: (v) =>
 
         @transform.shear = v
+        @transform\notifyChange!
 
 
     --- @brief Set the rotation of the node.
@@ -336,6 +371,7 @@ class SceneNode extends Object
     setRotation: (v) =>
 
         @transform.rotation = v
+        @transform\notifyChange!
 
 
 
@@ -397,6 +433,8 @@ class SceneNode extends Object
 
             child\_enterTree!
 
+        return child
+
 
     --- @brief Remove a child from the node.
     ---
@@ -427,6 +465,18 @@ class SceneNode extends Object
 
 
 
+    --- @brief Add an event handler.
+    ---
+    --- @param name : The event's name.
+    --- @param method : The method's name.
+    ---
+    addEventHandler: (name, method) =>
+
+        @events[name] = @[method]
+
+
+
+
     --- @brief Get the final transformation matrix of the current node.
     ---
     getFinalTransform: =>
@@ -437,7 +487,7 @@ class SceneNode extends Object
 
                 return Matrix!
 
-            return @transform\getMatrix!
+            return @get("transform")\getMatrix!
 
         else
 
@@ -445,7 +495,7 @@ class SceneNode extends Object
 
                 return @parent\getFinalTransform!\combine Matrix!
 
-            return @parent\getFinalTransform!\combine @transform\getMatrix!
+            return @parent\getFinalTransform!\combine @get("transform")\getMatrix!
 
 
     --- @brief Get the final inverted transformation matrix of the current node.
@@ -458,7 +508,7 @@ class SceneNode extends Object
 
                 return Matrix!
 
-            return @transform\getInvertedMatrix!
+            return @get("transform")\getInvertedMatrix!
 
         else
 
@@ -466,7 +516,7 @@ class SceneNode extends Object
 
                 return @parent\getFinalInvertedTransform!\combine Matrix!
 
-            return @parent\getFinalInvertedTransform!\combine @transform\getInvertedMatrix!
+            return @parent\getFinalInvertedTransform!\combine @get("transform")\getInvertedMatrix!
 
 
 
@@ -486,7 +536,7 @@ class SceneNode extends Object
 
         else
 
-            return @parent\getFinalAlpha! * @alpha
+            return @parent\getAlpha! * @alpha
 
 
     --- @brief Get the final alpha of the node.
@@ -498,7 +548,7 @@ class SceneNode extends Object
     ---
     getSelfAlpha: =>
 
-        return @getFinalAlpha! * @self_alpha
+        return @getAlpha! * @self_alpha
 
 
 

@@ -1,7 +1,9 @@
 
 import MemberReference from require "framework.core"
 
-import SceneNode, Vector from require "framework.scene_tree"
+import SceneNode, Vector, Rectangle, SceneTree from require "framework.scene_tree"
+
+import GuiController from require "framework.nodes.controls.gui_controller"
 
 
 
@@ -29,6 +31,10 @@ import SceneNode, Vector from require "framework.scene_tree"
 ---
 --- Signals:
 ---   - resized() : Called when the control is resized.
+---   - mouse-enter() : Called when the mouse enters the control.
+---   - mouse-exit() : Called when the mouse exits the control.
+---   - focus-gain() : Called when the control gain the focus.
+---   - focus-lost() : Called when the control lost the focus.
 ---
 --- Building table:
 ---   - margin_left_type : The type of the left margin.
@@ -63,12 +69,15 @@ class NodeControl extends SceneNode
     ---
     new: (t = {}) =>
 
+        unless t.position == nil
+            t.pos = t.position
+            t.position = nil
+
         super t
 
         @is_spatial = true
 
-        @has_size = true
-
+        @theme_section = ""
 
         @margin_left_type = @_opt t.margin_left_type, @@MarginType.fromLeft
         @margin_top_type = @_opt t.margin_top_type, @@MarginType.fromTop
@@ -88,6 +97,14 @@ class NodeControl extends SceneNode
         @custom_pos_setter = nil
         @custom_size_setter = nil
 
+        @stop_mouse = false
+        @receive_focus = false
+
+        @receive_events = true
+
+        @hovered = false
+        @focused = false
+
 
         @property "position", "getPosition", "setPosition"
         @property "size", "getSize", "setSize"
@@ -104,6 +121,37 @@ class NodeControl extends SceneNode
 
         @addSignal "resized"
 
+        @addSignal "mouse-enter"
+        @addSignal "mouse-exit"
+        @addSignal "focus-gain"
+        @addSignal "focus-lost"
+
+
+        @addEventHandler "mouse-moved", "_onMouseMoved"
+        @addEventHandler "mouse-pressed", "_onMousePressed"
+
+
+        if t.pos
+
+            @_pos = t.pos
+
+        if t.size
+
+            @_size = t.size
+
+
+
+    _topt: (t, name, def) =>
+
+        if t[name] != nil
+
+            return t[name]
+
+        if t.theme != nil and t.theme[@theme_section] != nil and t.theme[@theme_section][name] != nil
+
+            return t.theme[@theme_section][name]
+
+        return def
 
 
 
@@ -115,6 +163,19 @@ class NodeControl extends SceneNode
 
         @_resized_ref = MemberReference @, "_onParentResized"
         @parent\connect "resized", @_resized_ref
+
+
+        if @_pos
+
+            @set "position", @_pos
+            @_pos = nil
+
+        if @_size
+
+            @set "size", @_size
+            @_size = nil
+
+
 
 
     --- @brief Called when the node exits the tree.
@@ -131,11 +192,80 @@ class NodeControl extends SceneNode
             @_resized_ref = nil
 
 
+
+
     --- @brief Called when the parent resizes.
     ---
     _onParentResized: =>
 
         @_margin_modified = true
+
+
+
+
+    --- @brief Called when the mouse is moved.
+    ---
+    --- @param ev : The event.
+    ---
+    _onMouseMoved: (ev) =>
+
+        m_pos = Vector\from ev.args[1], ev.args[2]
+
+        fvec = @getFinalInvertedTransform!\transformVector m_pos
+        rect = Rectangle!
+
+        rect.b = @get "size"
+
+        if rect\contains(fvec) and not @hovered
+
+            @hovered = true
+            @emit "mouse-enter"
+
+            if @stop_mouse
+
+                ev.stop_propagation = true
+
+
+        else if not rect\contains(fvec) and @hovered
+
+            @hovered = false
+            @emit "mouse-exit"
+
+
+    --- @brief Called when a mouse is pressed.
+    ---
+    --- @param ev : The event.
+    ---
+    _onMousePressed: (ev) =>
+
+        m_pos = Vector\from ev.args[1], ev.args[2]
+
+        fvec = @getFinalInvertedTransform!\transformVector m_pos
+        rect = Rectangle!
+
+        rect.b = @get "size"
+
+        if rect\contains(fvec)
+
+            if GuiController\requestFocus @
+
+                ev.stop_propagation = true
+
+
+        else
+
+            GuiController\releaseFocus @
+
+
+
+
+    --- @brief Says if the control should keep the focus.
+    ---
+    --- @return True if the control should keep the focus.
+    ---
+    keepFocus: =>
+
+        return false
 
 
 
@@ -199,45 +329,44 @@ class NodeControl extends SceneNode
             pos_changed = true
 
 
-        -- right
+        if @has_size
 
-        unless t.skip_right
+            -- right
 
-            if @margin_right_type == @@MarginType.fromLeft
+            unless t.skip_right
 
-                size.x = @margin_right - pos.x
+                if @margin_right_type == @@MarginType.fromLeft
 
-            elseif @margin_right_type == @@MarginType.fromRight
+                    size.x = @margin_right - pos.x
 
-                size.x = p_size.x - @margin_right - pos.x
+                elseif @margin_right_type == @@MarginType.fromRight
 
-            else
+                    size.x = p_size.x - @margin_right - pos.x
 
-                size.x = p_size.x * @margin_right - pos.x
+                else
 
-            resized = true
+                    size.x = p_size.x * @margin_right - pos.x
 
-
-        -- bottom
-
-        unless t.skip_bottom
-
-            if @margin_bottom_type == @@MarginType.fromTop
-
-                size.y = @margin_bottom - pos.y
-
-            elseif @margin_bottom_type == @@MarginType.fromBottom
-
-                size.y = p_size.y - @margin_bottom - pos.y
-
-            else
-
-                size.y = p_size.y * @margin_bottom - pos.y
-
-            resized = true
+                resized = true
 
 
-        @_margin_modified = false
+            -- bottom
+
+            unless t.skip_bottom
+
+                if @margin_bottom_type == @@MarginType.fromTop
+
+                    size.y = @margin_bottom - pos.y
+
+                elseif @margin_bottom_type == @@MarginType.fromBottom
+
+                    size.y = p_size.y - @margin_bottom - pos.y
+
+                else
+
+                    size.y = p_size.y * @margin_bottom - pos.y
+
+                resized = true
 
 
 
@@ -249,7 +378,7 @@ class NodeControl extends SceneNode
 
             else
 
-                @transform.position = pos
+                @transform\set "position", pos
 
 
         if resized
@@ -263,6 +392,9 @@ class NodeControl extends SceneNode
                 @size = size
 
             @emit "resized"
+
+
+        @_margin_modified = false
 
 
 
@@ -318,7 +450,7 @@ class NodeControl extends SceneNode
 
         @_updateMargin {skip_left: true, skip_top: true}
 
-        @transform.position = v
+        @transform\set "position", v
 
 
 
@@ -326,6 +458,11 @@ class NodeControl extends SceneNode
     --- @brief Get the size of the control.
     ---
     getSize: =>
+
+        unless @has_size
+
+            return Vector!
+
 
         if @_margin_modified
 
@@ -338,6 +475,11 @@ class NodeControl extends SceneNode
     --- @brief Set the size of the control.
     ---
     setSize: (v) =>
+
+        unless @has_size
+
+            return
+
 
         p_size = @parent\get "size"
 

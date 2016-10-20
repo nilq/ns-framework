@@ -1,2 +1,2 @@
 
-require "examples.data"
+require "examples.theme"

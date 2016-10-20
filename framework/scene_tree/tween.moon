@@ -1,5 +1,5 @@
 
-import Object from require "framework.core"
+import Object, MemberReference from require "framework.core"
 
 import Easing from require "framework.scene_tree.easing"
 
@@ -14,6 +14,9 @@ state = {
     finished: 4
 }
 
+
+
+tbl = table
 
 
 --- @brief A tween.
@@ -278,6 +281,166 @@ class Tween extends Object
 
 
 
+--- @brief A tween composed of parallel tweens.
+---
+class ComposedTween extends Tween
+
+
+    --- @brief Create a new instance from a building tween.
+    ---
+    --- @param t : The building tween.
+    ---
+    new: (t = {}) =>
+
+        super t
+
+
+        @tweens = @_opt t.tweens, {}
+
+
+        if t.references
+
+            for entry in *t.references
+
+                tween = Tween {
+                    ref: entry[1]
+                    start_value: entry[2]
+                    end_value: entry[3]
+                }
+
+                tbl.insert @tweens, tween
+
+
+
+        if t.animate and t.animate.object and t.animate.keys and t.animate.values
+
+            object = t.animate.object
+
+
+            for key in *t.animate.keys
+
+                ref = MemberReference object, key
+
+                unless ref\isValid!
+
+                    error "Can't animate '#{key}' property (invalid reference)."
+
+
+                start_value = ref\get "value"
+
+                tween = Tween {
+                    :ref, :start_value,
+                    end_value: t.animate.values[key]
+                }
+
+                tbl.insert @tweens, tween
+
+
+
+        for tween in *@tweens
+
+            tween.clock = @clock
+            tween.start_delay = @start_delay
+            tween.repeat_delay = @repeat_delay
+            tween.duration = @duration
+            tween.repeat_count = @repeat_count
+            tween.reflect = @reflect
+            tween.easing = @easing
+
+
+
+
+    --- @brief Update the tween.
+    ---
+    process: (dt) =>
+
+        if @state == state.none or @state == state.finished
+
+            return
+
+
+        if @clock
+
+            @time += @clock\getDeltaTime!
+
+        else
+
+            @time += dt
+
+
+        all_finished = true
+
+
+        for tween in *@tweens
+
+            tween\process dt
+
+            if not tween\isFinished!
+
+                all_finished = false
+
+
+        if all_finished
+
+            @state = state.finished
+            @emit "finished"
+
+
+
+
+    --- @brief Invert the tween.
+    ---
+    invert: =>
+
+        for tween in *@tweens
+
+            tween\invert!
+
+
+
+
+    --- @brief Starts the tween.
+    ---
+    start: =>
+
+        @state = state.started
+        @time = 0
+
+        @emit "started"
+
+
+        for tween in *@tweens
+
+            tween\start!
+
+
+    --- @brief Cancels the tween.
+    ---
+    cancel: =>
+
+        @state = state.none
+
+        for tween in *@tweens
+
+            tween\cancel!
+
+
+    --- @brief Finishs the tween.
+    ---
+    finish: =>
+
+        @state = state.finished
+
+        for tween in *@tweens
+
+            tween\finish!
+
+        @emit "finished"
+
+
+
+
 {
     :Tween
+    :ComposedTween
 }

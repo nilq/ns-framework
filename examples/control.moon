@@ -3,7 +3,7 @@ import Love, Color, MemberReference from require "framework.core"
 
 import SceneNode, SceneTree, Tween, Easing, Vector from require "framework.scene_tree"
 
-import NodeControl from require "framework.nodes"
+import NodeControl, GuiController from require "framework.nodes"
 
 
 lg = love.graphics
@@ -17,14 +17,21 @@ class NodeTest extends NodeControl
 
         @color = t.color
 
-        @has_custom_pos_setter = true
-        @has_custom_size_setter = true
+        @_connect "mouse-enter", "onMouseEnter"
+        @_connect "mouse-exit", "onMouseExit"
+        @_connect "focus-gain", "onFocusGain"
+        @_connect "focus-lost", "onFocusLost"
 
-        @custom_pos_setter = "_setPos"
-        @custom_size_setter = "_setSize"
 
-        @pos_twn = nil
-        @size_twn = nil
+        @apply_transform_only_for_children = false
+        @stop_mouse = true
+
+        @dbg = t.dbg
+
+        if t.dbg
+
+            @transform.floor = true
+
 
 
     _draw: =>
@@ -35,53 +42,40 @@ class NodeTest extends NodeControl
 
         Love\set "color", @color
 
-        lg.rectangle "fill", pos.x, pos.y, size.x, size.y
+        lg.rectangle "fill", 0, 0, size.x, size.y
+
+        if @dbg
+
+            lg.setColor 255, 255, 255, 255
 
 
 
-    _setPos: (v) =>
+    onMouseEnter: =>
 
-        if @pos_twn != nil and @pos_twn\isStarted!
+        if not @focused
 
-            @pos_twn\cancel!
-
-
-        @pos_twn = Tween {
-            ref: MemberReference @transform, "position"
-
-            duration: 1
-            easing: Easing.Circ.Out
-
-            start_value: Vector\copy @transform.position
-            end_value: v
-        }
+            @color = Color\from 255,0,255
 
 
-        @addTween(@pos_twn)\start!
+    onMouseExit: =>
 
+        if not @focused
 
+            @color = Color\from 255,0,0
 
-    _setSize: (v) =>
+    onFocusGain: =>
 
-        if @size_twn != nil and @size_twn\isStarted!
+        @color = Color\from 0,255,0
 
-            @size_twn\cancel!
+    onFocusLost: =>
 
+        if @hovered
 
-        @size_twn = Tween {
-            ref: MemberReference @, "size", true
+            @color = Color\from 255,0,255
 
-            duration: 1
-            easing: Easing.Circ.Out
+        else
 
-            start_value: Vector\copy @size
-            end_value: v
-        }
-
-
-        @addTween(@size_twn)\start!
-
-
+            @color = Color\from 255,0,0
 
 
 
@@ -91,7 +85,7 @@ Love\connect "load", ->
         resizable: true
     }
 
-    SceneTree\addChild NodeTest {
+    nt = SceneTree\addChild NodeTest {
         color: Color\from(255, 0, 0),
 
         margin_left: 0.25
@@ -103,4 +97,21 @@ Love\connect "load", ->
         margin_right_type: NodeControl.MarginType.ratio
         margin_top_type: NodeControl.MarginType.ratio
         margin_bottom_type: NodeControl.MarginType.ratio
+    }
+
+
+    nt\addChild NodeTest {
+        color: Color\from(255, 0, 0),
+
+        margin_left: 0.4
+        margin_right: 0.6
+        margin_top: 0.4
+        margin_bottom: 0.6
+
+        margin_left_type: NodeControl.MarginType.ratio
+        margin_right_type: NodeControl.MarginType.ratio
+        margin_top_type: NodeControl.MarginType.ratio
+        margin_bottom_type: NodeControl.MarginType.ratio
+
+        dbg: true
     }
