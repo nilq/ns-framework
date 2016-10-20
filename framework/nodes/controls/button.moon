@@ -220,9 +220,15 @@ class NodeButton extends NodeBaseButton
         if @border_width >= 1
 
             Love\set "color", @border_color
-
             lg.setLineWidth @border_width
-            lg.rectangle "line", 0, 0, @size.x, @size.y, @border_radius
+
+        else
+
+            lg.setLineWidth 1
+
+
+
+        lg.rectangle "line", 0, 0, @size.x, @size.y, @border_radius
 
 
         x = 0

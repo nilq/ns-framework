@@ -281,10 +281,15 @@ class Tween extends Object
 
 
 
-
+--- @brief A tween composed of parallel tweens.
+---
 class ComposedTween extends Tween
 
 
+    --- @brief Create a new instance from a building tween.
+    ---
+    --- @param t : The building tween.
+    ---
     new: (t = {}) =>
 
         super t
@@ -344,6 +349,9 @@ class ComposedTween extends Tween
 
 
 
+
+    --- @brief Update the tween.
+    ---
     process: (dt) =>
 
         if @state == state.none or @state == state.finished
@@ -378,6 +386,10 @@ class ComposedTween extends Tween
             @emit "finished"
 
 
+
+
+    --- @brief Invert the tween.
+    ---
     invert: =>
 
         for tween in *@tweens
@@ -385,6 +397,10 @@ class ComposedTween extends Tween
             tween\invert!
 
 
+
+
+    --- @brief Starts the tween.
+    ---
     start: =>
 
         @state = state.started
@@ -397,6 +413,9 @@ class ComposedTween extends Tween
 
             tween\start!
 
+
+    --- @brief Cancels the tween.
+    ---
     cancel: =>
 
         @state = state.none
@@ -405,6 +424,9 @@ class ComposedTween extends Tween
 
             tween\cancel!
 
+
+    --- @brief Finishs the tween.
+    ---
     finish: =>
 
         @state = state.finished
@@ -414,6 +436,7 @@ class ComposedTween extends Tween
             tween\finish!
 
         @emit "finished"
+
 
 
 

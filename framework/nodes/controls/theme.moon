@@ -1,6 +1,10 @@
 
 import Object, Color from require "framework.core"
 
+import Vector from require "framework.scene_tree"
+
+
+
 
 --- @brief A GUI theme.
 ---
@@ -21,6 +25,9 @@ class Theme extends Object
 
         if t.button == nil
             t.button = {}
+
+        if t.checkbox == nil
+            t.checkbox = {}
 
 
         @panel = {
@@ -81,14 +88,55 @@ class Theme extends Object
 
             clicked_transition_time: 0.2
 
-            clicked_bg_color: @_opt t.button.background_color, Color\from 70,70,70
-            clicked_bg_alpha: @_opt t.button.background_alpha, 1
+            clicked_bg_color: @_opt t.button.clicked_bg_color, Color\from 70,70,70
+            clicked_bg_alpha: @_opt t.button.clicked_bg_alpha, 1
 
-            clicked_border_width: @_opt t.button.border_width, 0
-            clicked_border_color: @_opt t.button.border_color, Color\from 25,25,25
-            clicked_border_radius: @_opt t.button.border_radius, 14
+            clicked_border_width: @_opt t.button.clicked_border_width, 0
+            clicked_border_color: @_opt t.button.clicked_border_color, Color\from 25,25,25
+            clicked_border_radius: @_opt t.button.clicked_border_radius, 14
 
-            clicked_text_color: @_opt t.button.text_color, Color\from 255,150,150
+            clicked_text_color: @_opt t.button.clicked_text_color, Color\from 255,150,150
+
+        }
+
+        @checkbox = {
+
+            has_background: @_opt t.checkbox.has_background, false
+
+            transition_time: 1
+
+            background_color: @_opt t.checkbox.background_color, Color\from 55,50,55
+            background_alpha: @_opt t.checkbox.background_alpha, 1
+
+            box_size: @_opt t.checkbox.box_size, Vector\from 16,16
+            box_color: @_opt t.checkbox.box_color, Color\from 200,200,200
+            box_radius: @_opt t.checkbox.box_radius, 4
+            box_border_width: @_opt t.checkbox.box_border_width, 0
+            box_border_color: @_opt t.checkbox.box_border_color, Color\from 110,110,110
+
+
+            hovered_transition_time: 1
+
+            hovered_bg_color: @_opt t.checkbox.hovered_bg_color, Color\from 25,25,25
+            hovered_bg_alpha: @_opt t.checkbox.hovered_bg_alpha, 1
+
+            hovered_box_size: @_opt t.checkbox.hovered_box_size, Vector\from 16,16
+            hovered_box_color: @_opt t.checkbox.hovered_box_color, Color\from 255,200,200
+            hovered_box_radius: @_opt t.checkbox.hovered_box_radius, 4
+            hovered_box_border_width: @_opt t.checkbox.hovered_box_border_width, 0
+            hovered_box_border_color: @_opt t.checkbox.hovered_box_border_color, Color\from 110,110,110
+
+
+            checked_transition_time: 0.5
+
+            checked_bg_color: @_opt t.checkbox.checked_bg_color, Color\from 25,25,25
+            checked_bg_alpha: @_opt t.checkbox.checked_bg_alpha, 1
+
+            checked_box_size: @_opt t.checkbox.checked_box_size, Vector\from 16,16
+            checked_box_color: @_opt t.checkbox.checked_box_color, Color\from 80,40,50
+            checked_box_radius: @_opt t.checkbox.checked_box_radius, 6
+            checked_box_border_width: @_opt t.checkbox.checked_box_border_width, 2
+            checked_box_border_color: @_opt t.checkbox.checked_box_border_color, Color\from 100,50,60
 
         }
 

@@ -143,11 +143,11 @@ class NodeControl extends SceneNode
 
     _topt: (t, name, def) =>
 
-        if t[name]
+        if t[name] != nil
 
             return t[name]
 
-        if t.theme and t.theme[@theme_section] and t.theme[@theme_section][name]
+        if t.theme != nil and t.theme[@theme_section] != nil and t.theme[@theme_section][name] != nil
 
             return t.theme[@theme_section][name]
 
