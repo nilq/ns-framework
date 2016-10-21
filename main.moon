@@ -1,2 +1,2 @@
 
-require "examples.theme"
+require "examples.bunny_mark"

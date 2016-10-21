@@ -6,6 +6,8 @@ import format from string
 
 Love\connect "draw", ->
 
+    love.graphics.setColor 255, 255, 255
+
     fps = format "%07.2f", 1 / love.timer.getAverageDelta!
     mem = format "%013.4f", collectgarbage "count"
 
